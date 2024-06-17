@@ -16,16 +16,16 @@ const ThemePage: React.FC = () => {
     }
 
     return (
-        <div>
-            <h1>Thème: {themeId}</h1>
-            <Link to={`/review/${themeId}`}>Commencer la révision</Link>
+        <div className="container">
+            <h1 className="header">Thème: {themeId}</h1>
+            <Link className="button" to={`/review/${themeId}`}>Commencer la révision</Link>
 
             <AddCardForm themeId={themeId} />
 
             <BoxVisualization themeId={themeId} />
 
-            <h2>Cartes de révision</h2>
-            <div>
+            <h2 className="section-title">Cartes de révision</h2>
+            <div className="card-list">
                 {cards.map((card) => (
                     <Card key={card.id} {...card} />
                 ))}
