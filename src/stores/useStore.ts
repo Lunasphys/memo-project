@@ -1,16 +1,13 @@
-
 import create from 'zustand';
 
 interface Card {
     id: string;
     front: string;
     back: string;
-    image?: string;
-    audio?: string;
-    video?: string;
     category: string;
     theme: string;
     box: number;
+    hidden?: boolean;
 }
 
 interface Store {
@@ -23,57 +20,30 @@ interface Store {
     addCategory: (category: string) => void;
     themes: Record<string, string[]>;
     addTheme: (category: string, theme: string) => void;
-    saveToLocalStorage: () => void;
-    loadFromLocalStorage: () => void;
 }
 
-const loadState = () => {
-    try {
-        const serializedState = localStorage.getItem('memoAppState');
-        if (serializedState === null) {
-            return undefined;
-        }
-        return JSON.parse(serializedState);
-    } catch (err) {
-        console.error('Could not load state', err);
-        return undefined;
-    }
-};
-
-const saveState = (state: Store) => {
-    try {
-        const serializedState = JSON.stringify(state);
-        localStorage.setItem('memoAppState', serializedState);
-    } catch (err) {
-        console.error('Could not save state', err);
-    }
-};
-
 export const useStore = create<Store>((set) => ({
-    categories: loadState()?.categories || ['Langages de programmation'],
+    // Catégories par défaut
+    categories: ['Langages de programmation'],
     addCategory: (category) =>
-        set((state) => {
-            const newCategories = [...state.categories, category];
-            saveState({ ...state, categories: newCategories });
-            return { categories: newCategories };
-        }),
+        set((state) => ({categories: [...state.categories, category]})),
 
-    themes: loadState()?.themes || {
+    // Thèmes par défaut
+    themes: {
         'Langages de programmation': ['Java', 'C#'],
     },
     addTheme: (category, theme) =>
-        set((state) => {
-            const newThemes = {
+        set((state) => ({
+            themes: {
                 ...state.themes,
                 [category]: state.themes[category]
                     ? [...state.themes[category], theme]
                     : [theme],
-            };
-            saveState({ ...state, themes: newThemes });
-            return { themes: newThemes };
-        }),
+            },
+        })),
 
-    cards: loadState()?.cards || [
+    // Cartes par défaut avec 15 questions pour chaque thème
+    cards: [
         {
             id: '1',
             front: 'Qu’est-ce que la JVM ?',
@@ -81,6 +51,7 @@ export const useStore = create<Store>((set) => ({
             category: 'Langages de programmation',
             theme: 'Java',
             box: 1,
+            hidden: false,
         },
         {
             id: '2',
@@ -223,42 +194,42 @@ export const useStore = create<Store>((set) => ({
 
         },
     ],
-    addCard: (card) =>
-        set((state) => {
-            const newCards = [...state.cards, card];
-            saveState({ ...state, cards: newCards });
-            return { cards: newCards };
-        }),
+
+    addCard: (card) => set((state) => ({cards: [...state.cards, card]})),
     updateCard: (id, updates) =>
-        set((state) => {
-            const newCards = state.cards.map((card) =>
-                card.id === id ? { ...card, ...updates } : card
-            );
-            saveState({ ...state, cards: newCards });
-            return { cards: newCards };
-        }),
+        set((state) => ({
+            cards: state.cards.map((card) =>
+                card.id === id ? {...card, ...updates} : card
+            ),
+        })),
+
     correctAnswer: (id) =>
         set((state) => {
-            const newCards = state.cards.map((card) =>
-                card.id === id ? { ...card, box: card.box + 1 } : card
-            ).filter((card) => card.box <= 5); // Supprime les cartes de la boîte 6 et plus
-            saveState({ ...state, cards: newCards });
-            return { cards: newCards };
+            let Timer = 0;
+            const updatedCards = state.cards.map((card) => {
+                Timer = card.box * 60000; // Timer en fonction de la boîte
+                return card;
+            }).filter((card) => card.box <= 5); // Supprime les cartes de la boîte 6 et plus
+            setTimeout(() => {
+                // Réinitialiser la propriété "hidden" à "false" après 2 minutes
+                set((state) => ({
+                    cards: state.cards.map((card) => {
+                        if (card.id === id) {
+                            return {...card, hidden: false};
+                        }
+                        return card;
+                    })
+                }));
+            }, Timer); // Timer en fonction de la boîte
+            return {cards: updatedCards};
         }),
-    incorrectAnswer: (id) =>
-        set((state) => {
-            const newCards = state.cards.map((card) =>
-                card.id === id ? { ...card, box: 1 } : card
-            );
-            saveState({ ...state, cards: newCards });
-            return { cards: newCards };
-        }),
-    saveToLocalStorage: () => set((state) => {
-        saveState(state);
-        return state;
-    }),
-    loadFromLocalStorage: () => set(() => loadState() || {}),
-}));
 
-// Appel de chargement initial
-useStore.getState().loadFromLocalStorage();
+    incorrectAnswer: (id) =>
+        set((state) => ({
+            cards: state.cards.map((card) =>
+                card.id === id
+                    ? {...card, box: 1}
+                    : card
+            ),
+        })),
+}));
