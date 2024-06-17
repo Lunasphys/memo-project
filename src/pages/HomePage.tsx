@@ -13,13 +13,14 @@ const HomePage: React.FC = () => {
             <h1 className="header">Application de Mémorisation</h1>
             <div className="section">
                 <h2 className="section-title">Catégories</h2>
-                <ul>
+                <div className="category-list">
                     {categories.map((category) => (
-                        <li key={category}>
-                            <Link className="button" to={`/category/${category}`}>{category}</Link>
-                        </li>
+                        <Link className="category-item" key={category} to={`/category/${category}`}>
+                            {category}
+                        </Link>
                     ))}
-                </ul>
+                </div>
+                <br></br>
                 <button className="button" onClick={() => addCategory(prompt('Nouvelle catégorie') || '')}>
                     Ajouter une catégorie
                 </button>

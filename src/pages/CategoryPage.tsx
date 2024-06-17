@@ -16,18 +16,21 @@ const CategoryPage: React.FC = () => {
     const themeList = themes[categoryId] || [];
 
     return (
-        <div>
-            <h1>Thèmes pour la catégorie {categoryId}</h1>
-            <ul>
-                {themeList.map((theme) => (
-                    <li key={theme}>
-                        <Link to={`/theme/${theme}`}>{theme}</Link>
-                    </li>
-                ))}
-            </ul>
-            <button onClick={() => addTheme(categoryId, prompt('Nouveau thème') || '')}>
-                Ajouter un thème
-            </button>
+        <div className="container">
+            <h1 className="header">Thèmes pour la catégorie {categoryId}</h1>
+            <div className="section">
+                <div className="theme-list">
+                    {themeList.map((theme) => (
+                        <Link className="theme-item" key={theme} to={`/theme/${theme}`}>
+                            {theme}
+                        </Link>
+                    ))}
+                </div>
+                <br></br>
+                <button className="button" onClick={() => addTheme(categoryId, prompt('Nouveau thème') || '')}>
+                    Ajouter un thème
+                </button>
+            </div>
         </div>
     );
 };
