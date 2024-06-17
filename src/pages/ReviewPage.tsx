@@ -4,9 +4,9 @@ import { useStore } from '../stores/useStore';
 import Card from '../components/Card';
 
 const ReviewPage: React.FC = () => {
-    const { id } = useParams<{ id: string }>();
+    const { themeId } = useParams<{ themeId: string }>();
     const { cards, correctAnswer, incorrectAnswer } = useStore((state) => ({
-        cards: state.cards.filter((card) => card.theme === id),
+        cards: state.cards.filter((card) => card.theme === themeId),
         correctAnswer: state.correctAnswer,
         incorrectAnswer: state.incorrectAnswer,
     }));
@@ -29,7 +29,7 @@ const ReviewPage: React.FC = () => {
 
     return (
         <div>
-            <h1>Révision des cartes</h1>
+            <h1>Révision des cartes pour le thème: {themeId}</h1>
             <Card {...cards[currentCardIndex]} />
             <div>
                 <button onClick={() => handleAnswer(true)}>Correct</button>
