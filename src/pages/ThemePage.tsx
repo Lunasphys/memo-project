@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useStore } from '../stores/useStore';
 import Card from '../components/Card';
 import AddCardForm from '../components/AddCardForm';
+import BoxVisualization from '../components/BoxVisualization';
 
 const ThemePage: React.FC = () => {
     const navigate = useNavigate();
@@ -14,7 +15,6 @@ const ThemePage: React.FC = () => {
         cards: state.cards.filter((card) => card.theme === id),
     }));
 
-    // Redirection ou message d'erreur si `id` est undefined
     if (!id) {
         navigate('/');
         return null;
@@ -36,6 +36,8 @@ const ThemePage: React.FC = () => {
 
             <AddCardForm themeId={id} />
 
+            <BoxVisualization themeId={id} />
+
             <h2>Cartes de révision</h2>
             <div>
                 {cards.map((card) => (
@@ -45,5 +47,6 @@ const ThemePage: React.FC = () => {
         </div>
     );
 };
+
 
 export default ThemePage;
