@@ -4,12 +4,10 @@ interface Card {
     id: string;
     front: string;
     back: string;
-    image?: string;
-    audio?: string;
-    video?: string;
     category: string;
     theme: string;
     box: number;
+    hidden?: boolean;
 }
 
 interface Store {
@@ -28,7 +26,7 @@ export const useStore = create<Store>((set) => ({
     // Catégories par défaut
     categories: ['Langages de programmation'],
     addCategory: (category) =>
-        set((state) => ({ categories: [...state.categories, category] })),
+        set((state) => ({categories: [...state.categories, category]})),
 
     // Thèmes par défaut
     themes: {
@@ -53,6 +51,7 @@ export const useStore = create<Store>((set) => ({
             category: 'Langages de programmation',
             theme: 'Java',
             box: 1,
+            hidden: false,
         },
         {
             id: '2',
@@ -61,6 +60,8 @@ export const useStore = create<Store>((set) => ({
             category: 'Langages de programmation',
             theme: 'Java',
             box: 1,
+            hidden: false,
+
         },
         {
             id: '3',
@@ -69,6 +70,8 @@ export const useStore = create<Store>((set) => ({
             category: 'Langages de programmation',
             theme: 'Java',
             box: 1,
+            hidden: false,
+
         },
         {
             id: '4',
@@ -77,6 +80,8 @@ export const useStore = create<Store>((set) => ({
             category: 'Langages de programmation',
             theme: 'Java',
             box: 1,
+            hidden: false,
+
         },
         {
             id: '5',
@@ -85,6 +90,8 @@ export const useStore = create<Store>((set) => ({
             category: 'Langages de programmation',
             theme: 'Java',
             box: 1,
+            hidden: false,
+
         },
         {
             id: '6',
@@ -93,6 +100,8 @@ export const useStore = create<Store>((set) => ({
             category: 'Langages de programmation',
             theme: 'Java',
             box: 1,
+            hidden: false,
+
         },
         {
             id: '7',
@@ -101,6 +110,8 @@ export const useStore = create<Store>((set) => ({
             category: 'Langages de programmation',
             theme: 'Java',
             box: 1,
+            hidden: false,
+
         },
         {
             id: '8',
@@ -109,6 +120,8 @@ export const useStore = create<Store>((set) => ({
             category: 'Langages de programmation',
             theme: 'Java',
             box: 1,
+            hidden: false,
+
         },
         {
             id: '9',
@@ -117,6 +130,8 @@ export const useStore = create<Store>((set) => ({
             category: 'Langages de programmation',
             theme: 'Java',
             box: 1,
+            hidden: false,
+
         },
         {
             id: '10',
@@ -125,6 +140,8 @@ export const useStore = create<Store>((set) => ({
             category: 'Langages de programmation',
             theme: 'Java',
             box: 1,
+            hidden: false,
+
         },
         {
             id: '11',
@@ -133,6 +150,8 @@ export const useStore = create<Store>((set) => ({
             category: 'Langages de programmation',
             theme: 'Java',
             box: 1,
+            hidden: false,
+
         },
         {
             id: '12',
@@ -141,6 +160,8 @@ export const useStore = create<Store>((set) => ({
             category: 'Langages de programmation',
             theme: 'Java',
             box: 1,
+            hidden: false,
+
         },
         {
             id: '13',
@@ -149,6 +170,8 @@ export const useStore = create<Store>((set) => ({
             category: 'Langages de programmation',
             theme: 'Java',
             box: 1,
+            hidden: false,
+
         },
         {
             id: '14',
@@ -157,6 +180,8 @@ export const useStore = create<Store>((set) => ({
             category: 'Langages de programmation',
             theme: 'Java',
             box: 1,
+            hidden: false,
+
         },
         {
             id: '15',
@@ -165,28 +190,46 @@ export const useStore = create<Store>((set) => ({
             category: 'Langages de programmation',
             theme: 'Java',
             box: 1,
+            hidden: false,
+
         },
     ],
-    addCard: (card) => set((state) => ({ cards: [...state.cards, card] })),
+    addCard: (card) => set((state) => ({cards: [...state.cards, card]})),
     updateCard: (id, updates) =>
         set((state) => ({
             cards: state.cards.map((card) =>
-                card.id === id ? { ...card, ...updates } : card
+                card.id === id ? {...card, ...updates} : card
             ),
         })),
     correctAnswer: (id) =>
-        set((state) => ({
-            cards: state.cards.map((card) =>
-                card.id === id
-                    ? { ...card, box: card.box + 1 }
-                    : card
-            ).filter((card) => card.box <= 5), // Supprime les cartes de la boîte 6 et plus
-        })),
+        set((state) => {
+            const updatedCards = state.cards.map((card) => {
+                if (card.id === id) {
+                    // Mettre à jour la carte avec box + 1 et hidden à true
+                    return {...card, box: card.box + 1, hidden: true};
+                }
+                return card;
+            }).filter((card) => card.box <= 5); // Supprime les cartes de la boîte 6 et plus
+
+            setTimeout(() => {
+                // Réinitialiser la propriété "hidden" à "false" après 2 minutes
+                set((state) => ({
+                    cards: state.cards.map((card) => {
+                        if (card.id === id) {
+                            return {...card, hidden: false};
+                        }
+                        return card;
+                    })
+                }));
+            }, 120000); // 2 minutes en millisecondes
+
+            return {cards: updatedCards};
+        }),
     incorrectAnswer: (id) =>
         set((state) => ({
             cards: state.cards.map((card) =>
                 card.id === id
-                    ? { ...card, box: 1 }
+                    ? {...card, box: 1}
                     : card
             ),
         })),

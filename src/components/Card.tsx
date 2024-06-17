@@ -3,12 +3,9 @@ import React from 'react';
 interface CardProps {
     front: string;
     back: string;
-    image?: string;
-    audio?: string;
-    video?: string;
 }
 
-const Card: React.FC<CardProps> = ({ front, back, image, audio, video }) => {
+const Card: React.FC<CardProps> = ({ front, back }) => {
     const [flipped, setFlipped] = React.useState(false);
 
     return (
@@ -16,9 +13,6 @@ const Card: React.FC<CardProps> = ({ front, back, image, audio, video }) => {
             {!flipped ? (
                 <>
                     <p>{front}</p>
-                    {image && <img src={image} alt="front" style={{ maxWidth: '100%' }} />}
-                    {audio && <audio controls src={audio} />}
-                    {video && <video controls src={video} style={{ maxWidth: '100%' }} />}
                 </>
             ) : (
                 <>

@@ -6,7 +6,7 @@ import Card from '../components/Card';
 const ReviewPage: React.FC = () => {
     const { themeId } = useParams<{ themeId: string }>();
     const { cards, correctAnswer, incorrectAnswer } = useStore((state) => ({
-        cards: state.cards.filter((card) => card.theme === themeId),
+        cards: state.cards.filter((card) => card.theme === themeId && !card.hidden),
         correctAnswer: state.correctAnswer,
         incorrectAnswer: state.incorrectAnswer,
     }));
