@@ -194,6 +194,7 @@ export const useStore = create<Store>((set) => ({
 
         },
     ],
+
     addCard: (card) => set((state) => ({cards: [...state.cards, card]})),
     updateCard: (id, updates) =>
         set((state) => ({
@@ -201,16 +202,14 @@ export const useStore = create<Store>((set) => ({
                 card.id === id ? {...card, ...updates} : card
             ),
         })),
+
     correctAnswer: (id) =>
         set((state) => {
+            let Timer = 0;
             const updatedCards = state.cards.map((card) => {
-                if (card.id === id) {
-                    // Mettre à jour la carte avec box + 1 et hidden à true
-                    return {...card, box: card.box + 1, hidden: true};
-                }
+                Timer = card.box * 60000; // Timer en fonction de la boîte
                 return card;
             }).filter((card) => card.box <= 5); // Supprime les cartes de la boîte 6 et plus
-
             setTimeout(() => {
                 // Réinitialiser la propriété "hidden" à "false" après 2 minutes
                 set((state) => ({
@@ -221,10 +220,10 @@ export const useStore = create<Store>((set) => ({
                         return card;
                     })
                 }));
-            }, 120000); // 2 minutes en millisecondes
-
+            }, Timer); // Timer en fonction de la boîte
             return {cards: updatedCards};
         }),
+
     incorrectAnswer: (id) =>
         set((state) => ({
             cards: state.cards.map((card) =>
