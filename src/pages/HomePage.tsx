@@ -9,18 +9,21 @@ const HomePage: React.FC = () => {
     }));
 
     return (
-        <div>
-            <h1>Application de Mémorisation</h1>
-            <ul>
-                {categories.map((category) => (
-                    <li key={category}>
-                        <Link to={`/category/${category}`}>{category}</Link>
-                    </li>
-                ))}
-            </ul>
-            <button onClick={() => addCategory(prompt('Nouvelle catégorie') || '')}>
-                Ajouter une catégorie
-            </button>
+        <div className="container">
+            <h1 className="header">Application de Mémorisation</h1>
+            <div className="section">
+                <h2 className="section-title">Catégories</h2>
+                <ul>
+                    {categories.map((category) => (
+                        <li key={category}>
+                            <Link className="button" to={`/category/${category}`}>{category}</Link>
+                        </li>
+                    ))}
+                </ul>
+                <button className="button" onClick={() => addCategory(prompt('Nouvelle catégorie') || '')}>
+                    Ajouter une catégorie
+                </button>
+            </div>
         </div>
     );
 };
