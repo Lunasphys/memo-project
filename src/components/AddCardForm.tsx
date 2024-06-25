@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { useStore } from '../stores/useStore';
+import React, {useState} from 'react';
+import {useStore} from '../stores/useStore';
 
 interface AddCardFormProps {
     themeId: string;
 }
 
-const AddCardForm: React.FC<AddCardFormProps> = ({ themeId }) => {
+const AddCardForm: React.FC<AddCardFormProps> = ({themeId}) => {
     const [front, setFront] = useState('');
     const [back, setBack] = useState('');
 
@@ -20,6 +20,7 @@ const AddCardForm: React.FC<AddCardFormProps> = ({ themeId }) => {
                 category: '', // Vous pouvez ajouter une logique pour déterminer la catégorie
                 theme: themeId,
                 box: 1,
+                hidden: false,
             });
             setFront('');
             setBack('');

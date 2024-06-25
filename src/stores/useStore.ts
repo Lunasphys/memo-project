@@ -1,4 +1,4 @@
-
+import {defineStore} from 'pinia';
 import create from 'zustand';
 
 interface Card {
@@ -11,6 +11,7 @@ interface Card {
     category: string;
     theme: string;
     box: number;
+    hidden?: boolean;
 }
 
 interface Store {
