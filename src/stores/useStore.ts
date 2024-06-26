@@ -12,6 +12,7 @@ interface Card {
     theme: string;
     box: number;
     hidden?: boolean;
+    timeHidden: number;
 }
 
 interface Store {
@@ -26,6 +27,8 @@ interface Store {
     addTheme: (category: string, theme: string) => void;
     saveToLocalStorage: () => void;
     loadFromLocalStorage: () => void;
+    isHidden: (id: string) => void;
+
 }
 
 const loadState = () => {
@@ -55,8 +58,8 @@ export const useStore = create<Store>((set) => ({
     addCategory: (category) =>
         set((state) => {
             const newCategories = [...state.categories, category];
-            saveState({ ...state, categories: newCategories });
-            return { categories: newCategories };
+            saveState({...state, categories: newCategories});
+            return {categories: newCategories};
         }),
 
     themes: loadState()?.themes || {
@@ -70,8 +73,8 @@ export const useStore = create<Store>((set) => ({
                     ? [...state.themes[category], theme]
                     : [theme],
             };
-            saveState({ ...state, themes: newThemes });
-            return { themes: newThemes };
+            saveState({...state, themes: newThemes});
+            return {themes: newThemes};
         }),
 
     cards: loadState()?.cards || [
@@ -82,6 +85,8 @@ export const useStore = create<Store>((set) => ({
             category: 'Langages de programmation',
             theme: 'Java',
             box: 1,
+            hidden: false,
+            timeHidden: 0,
         },
         {
             id: '2',
@@ -91,6 +96,7 @@ export const useStore = create<Store>((set) => ({
             theme: 'Java',
             box: 1,
             hidden: false,
+            timeHidden: 0,
 
         },
         {
@@ -101,6 +107,7 @@ export const useStore = create<Store>((set) => ({
             theme: 'Java',
             box: 1,
             hidden: false,
+            timeHidden: 0,
 
         },
         {
@@ -111,6 +118,7 @@ export const useStore = create<Store>((set) => ({
             theme: 'Java',
             box: 1,
             hidden: false,
+            timeHidden: 0,
 
         },
         {
@@ -121,6 +129,7 @@ export const useStore = create<Store>((set) => ({
             theme: 'Java',
             box: 1,
             hidden: false,
+            timeHidden: 0,
 
         },
         {
@@ -131,6 +140,7 @@ export const useStore = create<Store>((set) => ({
             theme: 'Java',
             box: 1,
             hidden: false,
+            timeHidden: 0,
 
         },
         {
@@ -141,6 +151,7 @@ export const useStore = create<Store>((set) => ({
             theme: 'Java',
             box: 1,
             hidden: false,
+            timeHidden: 0,
 
         },
         {
@@ -151,6 +162,7 @@ export const useStore = create<Store>((set) => ({
             theme: 'Java',
             box: 1,
             hidden: false,
+            timeHidden: 0,
 
         },
         {
@@ -161,6 +173,7 @@ export const useStore = create<Store>((set) => ({
             theme: 'Java',
             box: 1,
             hidden: false,
+            timeHidden: 0,
 
         },
         {
@@ -171,6 +184,7 @@ export const useStore = create<Store>((set) => ({
             theme: 'Java',
             box: 1,
             hidden: false,
+            timeHidden: 0,
 
         },
         {
@@ -181,6 +195,7 @@ export const useStore = create<Store>((set) => ({
             theme: 'Java',
             box: 1,
             hidden: false,
+            timeHidden: 0,
 
         },
         {
@@ -191,6 +206,7 @@ export const useStore = create<Store>((set) => ({
             theme: 'Java',
             box: 1,
             hidden: false,
+            timeHidden: 0,
 
         },
         {
@@ -201,6 +217,7 @@ export const useStore = create<Store>((set) => ({
             theme: 'Java',
             box: 1,
             hidden: false,
+            timeHidden: 0,
 
         },
         {
@@ -211,6 +228,7 @@ export const useStore = create<Store>((set) => ({
             theme: 'Java',
             box: 1,
             hidden: false,
+            timeHidden: 0,
 
         },
         {
@@ -221,39 +239,60 @@ export const useStore = create<Store>((set) => ({
             theme: 'Java',
             box: 1,
             hidden: false,
+            timeHidden: 0,
 
         },
     ],
     addCard: (card) =>
         set((state) => {
             const newCards = [...state.cards, card];
-            saveState({ ...state, cards: newCards });
-            return { cards: newCards };
+            saveState({...state, cards: newCards});
+            return {cards: newCards};
         }),
     updateCard: (id, updates) =>
         set((state) => {
             const newCards = state.cards.map((card) =>
-                card.id === id ? { ...card, ...updates } : card
+                card.id === id ? {...card, ...updates} : card
             );
-            saveState({ ...state, cards: newCards });
-            return { cards: newCards };
+            saveState({...state, cards: newCards});
+            return {cards: newCards};
         }),
     correctAnswer: (id) =>
         set((state) => {
-            const newCards = state.cards.map((card) =>
-                card.id === id ? { ...card, box: card.box + 1 } : card
-            ).filter((card) => card.box <= 5); // Supprime les cartes de la boîte 6 et plus
-            saveState({ ...state, cards: newCards });
-            return { cards: newCards };
+            const newCards = state.cards.map((card) => {
+                if (card.id === id) {
+                    return {...card, box: card.box + 1, hidden: true, timeHidden: Date.now() + (120000 * card.box)}; // Ajoute 1 minute au temps actuel
+                }
+                return card;
+            }).filter((card) => card.box <= 5); // Supprime les cartes de la boîte 6 et plus
+            saveState({...state, cards: newCards});
+            return {cards: newCards};
         }),
     incorrectAnswer: (id) =>
         set((state) => {
             const newCards = state.cards.map((card) =>
-                card.id === id ? { ...card, box: 1 } : card
+                card.id === id ? {...card, box: 1, hidden: false, timeHidden: 0} : card
             );
-            saveState({ ...state, cards: newCards });
-            return { cards: newCards };
+            saveState({...state, cards: newCards});
+            return {cards: newCards};
         }),
+    isHidden: (id) =>
+        set((state) => {
+            const newCards = state.cards.map((card) => {
+                if (card.id === id) {
+                    const currentTime = Date.now();
+                    if (card.timeHidden - currentTime < 0) {
+                        return {...card, hidden: false}; // Met la propriété hidden à false si la différence est 0
+                    } else {
+                        return {...card, hidden: true}; // Met la propriété hidden à true dans le cas contraire
+                    }
+                }
+                return card;
+            });
+            saveState({...state, cards: newCards});
+            return {cards: newCards};
+        }),
+
     saveToLocalStorage: () => set((state) => {
         saveState(state);
         return state;

@@ -21,6 +21,7 @@ const AddCardForm: React.FC<AddCardFormProps> = ({themeId}) => {
                 theme: themeId,
                 box: 1,
                 hidden: false,
+                timeHidden: 0,
             });
             setFront('');
             setBack('');

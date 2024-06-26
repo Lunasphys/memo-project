@@ -11,6 +11,8 @@ interface CardProps {
     category: string;
     theme: string;
     box: number;
+    hidden?: boolean;
+    timeHidden: number;
 }
 
 const Card: React.FC<CardProps> = ({ front, back }) => {

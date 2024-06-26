@@ -4,11 +4,13 @@ import { useStore } from '../stores/useStore';
 import Card from '../components/Card';
 
 const ReviewPage: React.FC = () => {
+
     const { themeId } = useParams<{ themeId: string }>();
     const { cards, correctAnswer, incorrectAnswer } = useStore((state) => ({
-        cards: state.cards.filter((card) => card.theme === themeId && !card.hidden),
+        cards: state.cards.filter((card) => card.theme === themeId && !card.hidden ),
         correctAnswer: state.correctAnswer,
         incorrectAnswer: state.incorrectAnswer,
+        isHidden: state.isHidden,
     }));
 
     const [currentCardIndex, setCurrentCardIndex] = useState(0);
@@ -17,8 +19,10 @@ const ReviewPage: React.FC = () => {
         const card = cards[currentCardIndex];
         if (correct) {
             correctAnswer(card.id);
+            console.log('isHidden', card.hidden, '+', card.timeHidden, '+', card.box);
         } else {
             incorrectAnswer(card.id);
+            console.log('isHidden', card.hidden, '+', card.timeHidden, '+', card.box);
         }
         setCurrentCardIndex((prevIndex) => (prevIndex + 1) % cards.length);
     };
