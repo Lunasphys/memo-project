@@ -1,4 +1,4 @@
-import {defineStore} from 'pinia';
+// import {defineStore} from 'pinia';
 import create from 'zustand';
 
 interface Card {
@@ -11,7 +11,7 @@ interface Card {
     category: string;
     theme: string;
     box: number;
-    hidden?: boolean;
+    hidden: boolean;
     timeHidden: number;
 }
 
@@ -27,11 +27,9 @@ interface Store {
     addTheme: (category: string, theme: string) => void;
     saveToLocalStorage: () => void;
     loadFromLocalStorage: () => void;
-    isHidden: (id: string) => void;
-
 }
 
-const loadState = () => {
+const loadState = () => { // Fonction pour charger l'état depuis le localStorage
     try {
         const serializedState = localStorage.getItem('memoAppState');
         if (serializedState === null) {
@@ -44,7 +42,7 @@ const loadState = () => {
     }
 };
 
-const saveState = (state: Store) => {
+const saveState = (state: Store) => { // Fonction pour sauvegarder l'état dans le localStorage
     try {
         const serializedState = JSON.stringify(state);
         localStorage.setItem('memoAppState', serializedState);
@@ -54,7 +52,9 @@ const saveState = (state: Store) => {
 };
 
 export const useStore = create<Store>((set) => ({
+
     categories: loadState()?.categories || ['Langages de programmation'],
+
     addCategory: (category) =>
         set((state) => {
             const newCategories = [...state.categories, category];
@@ -65,6 +65,7 @@ export const useStore = create<Store>((set) => ({
     themes: loadState()?.themes || {
         'Langages de programmation': ['Java', 'C#'],
     },
+
     addTheme: (category, theme) =>
         set((state) => {
             const newThemes = {
@@ -243,12 +244,14 @@ export const useStore = create<Store>((set) => ({
 
         },
     ],
+
     addCard: (card) =>
         set((state) => {
             const newCards = [...state.cards, card];
             saveState({...state, cards: newCards});
             return {cards: newCards};
         }),
+
     updateCard: (id, updates) =>
         set((state) => {
             const newCards = state.cards.map((card) =>
@@ -257,38 +260,24 @@ export const useStore = create<Store>((set) => ({
             saveState({...state, cards: newCards});
             return {cards: newCards};
         }),
+
     correctAnswer: (id) =>
         set((state) => {
             const newCards = state.cards.map((card) => {
                 if (card.id === id) {
-                    return {...card, box: card.box + 1, hidden: true, timeHidden: Date.now() + (120000 * card.box)}; // Ajoute 1 minute au temps actuel
+                    return {...card, box: card.box + 1, hidden: true, timeHidden: Date.now() + (60000 * Math.pow(2, card.box - 1))}; // Chaque boîte double le délai par rapport à la précédente grâce à la puissance de 2 en terme pour masquer la carte
                 }
                 return card;
             }).filter((card) => card.box <= 5); // Supprime les cartes de la boîte 6 et plus
             saveState({...state, cards: newCards});
             return {cards: newCards};
         }),
+
     incorrectAnswer: (id) =>
         set((state) => {
             const newCards = state.cards.map((card) =>
-                card.id === id ? {...card, box: 1, hidden: false, timeHidden: 0} : card
+                card.id === id ? {...card, box: 1, hidden: false, timeHidden: 0} : card // Remet la carte dans la première boîte
             );
-            saveState({...state, cards: newCards});
-            return {cards: newCards};
-        }),
-    isHidden: (id) =>
-        set((state) => {
-            const newCards = state.cards.map((card) => {
-                if (card.id === id) {
-                    const currentTime = Date.now();
-                    if (card.timeHidden - currentTime < 0) {
-                        return {...card, hidden: false}; // Met la propriété hidden à false si la différence est 0
-                    } else {
-                        return {...card, hidden: true}; // Met la propriété hidden à true dans le cas contraire
-                    }
-                }
-                return card;
-            });
             saveState({...state, cards: newCards});
             return {cards: newCards};
         }),
@@ -297,6 +286,7 @@ export const useStore = create<Store>((set) => ({
         saveState(state);
         return state;
     }),
+
     loadFromLocalStorage: () => set(() => loadState() || {}),
 }));
 
