@@ -38,7 +38,6 @@ const ReviewPage: React.FC = () => {
         const interval = setInterval(() => {
             cards.forEach((card) => {
                 isHidden(card.id);
-                console.log(card.id,'+', card.hidden,'+', card.timeHidden - Date.now());
             });
         }, 1000);
 
