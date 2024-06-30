@@ -61,7 +61,7 @@ const saveState = (state: Store) => { // Fonction pour sauvegarder l'état dans 
 
 export const useStore = create<Store>((set) => ({
     categories: loadState()?.categories || ['Langages de programmation'],
-    themes: loadState()?.themes || {'Langages de programmation': ['Java', 'C#']},
+    themes: loadState()?.themes || { 'Langages de programmation': ['Java', 'Python'] },
     cards: loadState()?.cards || [
         {
             id: '1',
@@ -228,137 +228,133 @@ export const useStore = create<Store>((set) => ({
 
         },
         {
-            id: 16,
-            front: "Qu'est-ce que C# ?",
-            back: "C# est un langage de programmation développé par Microsoft.",
-            category: "Langages de programmation",
-            theme: "C#",
-            box: 1,
-            hidden: false,
-            timeHidden: 0
-        },
-        {
-            id: 17,
-            front: "Quelles sont les principales caractéristiques de C# ?",
-            back: "C# est fortement typé, orienté objet, prend en charge l'héritage, le polymorphisme, etc.",
-            category: "Langages de programmation",
-            theme: "C#",
-            box: 1,
-            hidden: false,
-            timeHidden: 0
-        },
-        {
-            id: 18,
-            front: "Qu'est-ce que le framework .NET en lien avec C# ?",
-            back: ".NET est un framework de développement logiciel de Microsoft utilisé pour créer des applications C#.",
-            category: "Langages de programmation",
-            theme: "C#",
-            box: 1,
-            hidden: false,
-            timeHidden: 0
-        },
-        {
-            id: 19,
-            front: "Quelle est la dernière version de C# ?",
-            back: "La dernière version de C# est C# 9.0, sortie en 2020.",
-            category: "Langages de programmation",
-            theme: "C#",
-            box: 1,
-            hidden: false,
-            timeHidden: 0
-        },
-        {
-            id: 20,
-            front: "Quel est l'avantage de la programmation asynchrone en C# ?",
-            back: "La programmation asynchrone permet d'améliorer les performances en gérant des tâches de manière non bloquante.",
-            category: "Langages de programmation",
-            theme: "C#",
-            box: 1,
-            hidden: false,
-            timeHidden: 0
-        },
-        {
-            id: 21,
-            front: "Comment gérer les exceptions en C# ?",
-            back: "Les exceptions en C# sont gérées à l'aide des blocs try, catch, finally pour traiter les erreurs.",
-            category: "Langages de programmation",
-            theme: "C#",
-            box: 1,
-            hidden: false,
-            timeHidden: 0
-        },
-        {
-            id: 22,
-            front: "Qu'est-ce que LINQ en C# ?",
-            back: "LINQ est une technologie intégrée dans C# pour manipuler des données de manière simplifiée.",
-            category: "Langages de programmation",
-            theme: "C#",
-            box: 1,
-            hidden: false,
-            timeHidden: 0
-        },
-        {
-            id: 23,
-            front: "Quelle est l'utilité des propriétés automatiques en C# ?",
-            back: "Les propriétés automatiques permettent de simplifier la définition de getters et setters dans les classes C#.",
-            category: "Langages de programmation",
-            theme: "C#",
-            box: 1,
-            hidden: false,
-            timeHidden: 0
-        },
-        {
-            id: 24,
-            front: "Quel est le rôle des délégués (delegates) en C# ?",
-            back: "Les délégués sont des types qui permettent de créer des références vers des méthodes dans C#.",
-            category: "Langages de programmation",
-            theme: "C#",
-            box: 1,
-            hidden: false,
-            timeHidden: 0
-        },
-        {
-            id: 25,
-            front: "Quelle est la différence entre les classes abstraites et les interfaces en C# ?",
-            back: "Les classes abstraites peuvent contenir des implémentations de méthodes, tandis que les interfaces ne peuvent définir que des signatures de méthodes.",
-            category: "Langages de programmation",
-            theme: "C#",
-            box: 1,
-            hidden: false,
-            timeHidden: 0
-        }
+        id: 16,
+        front: 'Qu\'est-ce que Python ?',
+        back: 'Python est un langage de programmation interprété, polyvalent et facile à apprendre.',
+        category: 'Langages de programmation',
+        theme: 'Python',
+        box: 1,
+        hidden: false,
+        timeHidden: 0
+    },
+    {
+        id: 17,
+        front: 'Quelles sont les principales caractéristiques de Python ?',
+        back: 'Python est connu pour sa lisibilité, sa syntaxe claire, sa grande communauté et sa polyvalence.',
+        category: 'Langages de programmation',
+        theme: 'Python',
+        box: 1,
+        hidden: false,
+        timeHidden: 0
+    },
+    {
+        id: 18,
+        front: 'Pourquoi Python est-il populaire en science des données ?',
+        back: 'Python offre de nombreuses bibliothèques puissantes comme NumPy, Pandas et Matplotlib pour l\'analyse de données.',
+        category: 'Langages de programmation',
+        theme: 'Python',
+        box: 1,
+        hidden: false,
+        timeHidden: 0
+    },
+    {
+        id: 19,
+        front: 'Quelle est la différence entre Python 2 et Python 3 ?',
+        back: 'Python 3 est la version actuelle avec des améliorations majeures par rapport à Python 2, qui n\'est plus maintenu.',
+        category: 'Langages de programmation',
+        theme: 'Python',
+        box: 1,
+        hidden: false,
+        timeHidden: 0
+    },
+    {
+        id: 20,
+        front: 'Comment gérer les exceptions en Python ?',
+        back: 'Les exceptions en Python sont gérées à l\'aide des blocs try, except pour capturer et traiter les erreurs.',
+        category: 'Langages de programmation',
+        theme: 'Python',
+        box: 1,
+        hidden: false,
+        timeHidden: 0
+    },
+    {
+        id: 21,
+        front: 'Qu\'est-ce que l\'interpréteur Python ?',
+        back: 'L\'interpréteur Python est un programme qui exécute les instructions Python ligne par ligne.',
+        category: 'Langages de programmation',
+        theme: 'Python',
+        box: 1,
+        hidden: false,
+        timeHidden: 0
+    },
+    {
+        id: 22,
+        front: 'Quels sont les avantages de l\'utilisation de Python pour le développement web ?',
+        back: 'Python est utilisé avec des frameworks comme Django et Flask pour le développement rapide et efficace de sites web.',
+        category: 'Langages de programmation',
+        theme: 'Python',
+        box: 1,
+        hidden: false,
+        timeHidden: 0
+    },
+    {
+        id: 23,
+        front: 'Comment définir une fonction en Python ?',
+        back: 'Les fonctions en Python sont définies avec le mot-clé def suivi du nom de la fonction et de ses paramètres.',
+        category: 'Langages de programmation',
+        theme: 'Python',
+        box: 1,
+        hidden: false,
+        timeHidden: 0
+    },
+    {
+        id: 24,
+        front: 'Qu\'est-ce que PIP en Python ?',
+        back: 'PIP est un gestionnaire de paquets Python qui facilite l\'installation et la gestion de bibliothèques externes.',
+        category: 'Langages de programmation',
+        theme: 'Python',
+        box: 1,
+        hidden: false,
+        timeHidden: 0
+    },
+    {
+        id: 25,
+        front: 'Quelle est l\'importance des listes en Python ?',
+        back: 'Les listes en Python sont des structures de données flexibles et polyvalentes pour stocker des éléments de manière séquentielle.',
+        category: 'Langages de programmation',
+        theme: 'Python',
+        box: 1,
+        hidden: false,
+        timeHidden: 0
+    }
+
     ],
 
     addCard: (card) =>
         set((state) => {
-            const newCards = [...state.cards, {...card, hidden: false}];
-            saveState({...state, cards: newCards});
-            return {cards: newCards};
+            const newCards = [...state.cards, { ...card, hidden: false }];
+            saveState({ ...state, cards: newCards });
+            return { cards: newCards };
         }),
     updateCard: (id, updates) =>
         set((state) => {
             const newCards = state.cards.map((card) =>
-                card.id === id ? {...card, ...updates} : card
+                card.id === id ? { ...card, ...updates } : card
             );
-            saveState({...state, cards: newCards});
-            return {cards: newCards};
+            saveState({ ...state, cards: newCards });
+            return { cards: newCards };
         }),
     deleteCard: (id) =>
         set((state) => {
             const newCards = state.cards.filter((card) => card.id !== id);
-            saveState({...state, cards: newCards});
-            return {cards: newCards};
+            saveState({ ...state, cards: newCards });
+            return { cards: newCards };
         }),
     correctAnswer: (id) =>
         set((state) => {
             const newCards = state.cards.map((card) => {
                 if (card.id === id) {
-                    return {
-                        ...card,
-                        box: card.box + 1,
-                        hidden: true,
-                        timeHidden: Date.now() + (60000 * Math.pow(2, card.box - 1))
-                    }; // Chaque boîte double le délai par rapport à la précédente grâce à la puissance de 2 en terme pour masquer la carte
+                    return {...card, box: card.box + 1, hidden: true, timeHidden: Date.now() + (60000 * Math.pow(2, card.box - 1))}; // Chaque boîte double le délai par rapport à la précédente grâce à la puissance de 2 en terme pour masquer la carte
                 }
                 return card;
             }).filter((card) => card.box <= 5); // Supprime les cartes de la boîte 6 et plus
@@ -377,38 +373,38 @@ export const useStore = create<Store>((set) => ({
     hideCard: (id) =>
         set((state) => {
             const newCards = state.cards.map((card) =>
-                card.id === id ? {...card, hidden: true} : card
+                card.id === id ? { ...card, hidden: true } : card
             );
-            saveState({...state, cards: newCards});
-            return {cards: newCards};
+            saveState({ ...state, cards: newCards });
+            return { cards: newCards };
         }),
 
     addCategory: (category) =>
         set((state) => {
             const newCategories = [...state.categories, category];
-            saveState({...state, categories: newCategories});
-            return {categories: newCategories};
+            saveState({ ...state, categories: newCategories });
+            return { categories: newCategories };
         }),
     updateCategory: (oldCategory, newCategory) =>
         set((state) => {
             const newCategories = state.categories.map((category) =>
                 category === oldCategory ? newCategory : category
             );
-            const newThemes = {...state.themes, [newCategory]: state.themes[oldCategory]};
+            const newThemes = { ...state.themes, [newCategory]: state.themes[oldCategory] };
             delete newThemes[oldCategory];
             const newCards = state.cards.map((card) =>
-                card.category === oldCategory ? {...card, category: newCategory} : card
+                card.category === oldCategory ? { ...card, category: newCategory } : card
             );
-            saveState({...state, categories: newCategories, themes: newThemes, cards: newCards});
-            return {categories: newCategories, themes: newThemes, cards: newCards};
+            saveState({ ...state, categories: newCategories, themes: newThemes, cards: newCards });
+            return { categories: newCategories, themes: newThemes, cards: newCards };
         }),
     deleteCategory: (category) =>
         set((state) => {
             const newCategories = state.categories.filter((cat) => cat !== category);
-            const {[category]: _, ...newThemes} = state.themes;
+            const { [category]: _, ...newThemes } = state.themes;
             const newCards = state.cards.filter((card) => card.category !== category);
-            saveState({...state, categories: newCategories, themes: newThemes, cards: newCards});
-            return {categories: newCategories, themes: newThemes, cards: newCards};
+            saveState({ ...state, categories: newCategories, themes: newThemes, cards: newCards });
+            return { categories: newCategories, themes: newThemes, cards: newCards };
         }),
 
     addTheme: (category, theme) =>
@@ -419,8 +415,8 @@ export const useStore = create<Store>((set) => ({
                     ? [...state.themes[category], theme]
                     : [theme],
             };
-            saveState({...state, themes: newThemes});
-            return {themes: newThemes};
+            saveState({ ...state, themes: newThemes });
+            return { themes: newThemes };
         }),
     updateTheme: (category, oldTheme, newTheme) =>
         set((state) => {
@@ -431,10 +427,10 @@ export const useStore = create<Store>((set) => ({
                 ),
             };
             const newCards = state.cards.map((card) =>
-                card.theme === oldTheme && card.category === category ? {...card, theme: newTheme} : card
+                card.theme === oldTheme && card.category === category ? { ...card, theme: newTheme } : card
             );
-            saveState({...state, themes: newThemes, cards: newCards});
-            return {themes: newThemes, cards: newCards};
+            saveState({ ...state, themes: newThemes, cards: newCards });
+            return { themes: newThemes, cards: newCards };
         }),
     deleteTheme: (category, theme) =>
         set((state) => {
@@ -445,8 +441,8 @@ export const useStore = create<Store>((set) => ({
             const newCards = state.cards.filter(
                 (card) => !(card.theme === theme && card.category === category)
             );
-            saveState({...state, themes: newThemes, cards: newCards});
-            return {themes: newThemes, cards: newCards};
+            saveState({ ...state, themes: newThemes, cards: newCards });
+            return { themes: newThemes, cards: newCards };
         }),
 
     saveToLocalStorage: () => set((state) => {
