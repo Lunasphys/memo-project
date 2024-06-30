@@ -6,7 +6,7 @@ import Card from '../components/Card';
 const ReviewPage: React.FC = () => {
     const {themeId} = useParams<{ themeId: string }>();
     const {cards, correctAnswer, incorrectAnswer} = useStore((state) => ({
-        cards: state.cards.filter((card) => card.theme === themeId),
+        cards: state.cards.filter((card) => card.theme === themeId && !card.hidden),
         correctAnswer: state.correctAnswer,
         incorrectAnswer: state.incorrectAnswer,
     }));
@@ -44,15 +44,19 @@ const ReviewPage: React.FC = () => {
         return () => clearInterval(interval);
     }, [cards, isHidden]);
 
-    const handleAnswer = (correct: boolean) => { // Fonction pour gérer les réponses correctes et incorrectes
-        const card = visibleCards[currentCardIndex];
+    const handleAnswer = (correct: boolean) => {
+        const updatedVisibleCards = [...visibleCards]; // Créer une copie de la liste visibleCards
+        const card = updatedVisibleCards[currentCardIndex];
         if (correct) {
             correctAnswer(card.id);
+            updatedVisibleCards.splice(currentCardIndex, 1); // Supprimer la carte correctement répondue de la liste visibleCards
         } else {
             incorrectAnswer(card.id);
         }
-        setCurrentCardIndex((prevIndex) => (prevIndex + 1) % visibleCards.length);
+        setCurrentCardIndex((prevIndex) => (prevIndex + 1) % updatedVisibleCards.length); // Mettre à jour l'index actuel en fonction de la nouvelle liste visibleCards
+        setVisibleCards(updatedVisibleCards); // Mettre à jour la liste visibleCards avec la carte correctement répondue supprimée
     };
+
 
     if (visibleCards.length === 0) {
         return <div>Pas de cartes à réviser pour le moment.</div>;
