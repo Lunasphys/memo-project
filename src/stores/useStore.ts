@@ -13,18 +13,26 @@ interface Card {
     box: number;
     hidden: boolean;
     timeHidden: number;
+    isReviewing: boolean;
+
 }
 
 interface Store {
     cards: Card[];
+    categories: string[];
+    themes: Record<string, string[]>;
     addCard: (card: Card) => void;
     updateCard: (id: string, updates: Partial<Card>) => void;
+    deleteCard: (id: string) => void;
     correctAnswer: (id: string) => void;
     incorrectAnswer: (id: string) => void;
-    categories: string[];
+    hideCard: (id: string) => void;
     addCategory: (category: string) => void;
-    themes: Record<string, string[]>;
+    updateCategory: (oldCategory: string, newCategory: string) => void;
+    deleteCategory: (category: string) => void;
     addTheme: (category: string, theme: string) => void;
+    updateTheme: (category: string, oldTheme: string, newTheme: string) => void;
+    deleteTheme: (category: string, theme: string) => void;
     saveToLocalStorage: () => void;
     loadFromLocalStorage: () => void;
 }
@@ -52,32 +60,8 @@ const saveState = (state: Store) => { // Fonction pour sauvegarder l'état dans 
 };
 
 export const useStore = create<Store>((set) => ({
-
     categories: loadState()?.categories || ['Langages de programmation'],
-
-    addCategory: (category) =>
-        set((state) => {
-            const newCategories = [...state.categories, category];
-            saveState({...state, categories: newCategories});
-            return {categories: newCategories};
-        }),
-
-    themes: loadState()?.themes || {
-        'Langages de programmation': ['Java', 'C#'],
-    },
-
-    addTheme: (category, theme) =>
-        set((state) => {
-            const newThemes = {
-                ...state.themes,
-                [category]: state.themes[category]
-                    ? [...state.themes[category], theme]
-                    : [theme],
-            };
-            saveState({...state, themes: newThemes});
-            return {themes: newThemes};
-        }),
-
+    themes: loadState()?.themes || { 'Langages de programmation': ['Java', 'C#'] },
     cards: loadState()?.cards || [
         {
             id: '1',
@@ -247,20 +231,24 @@ export const useStore = create<Store>((set) => ({
 
     addCard: (card) =>
         set((state) => {
-            const newCards = [...state.cards, card];
-            saveState({...state, cards: newCards});
-            return {cards: newCards};
+            const newCards = [...state.cards, { ...card, hidden: false }];
+            saveState({ ...state, cards: newCards });
+            return { cards: newCards };
         }),
-
     updateCard: (id, updates) =>
         set((state) => {
             const newCards = state.cards.map((card) =>
-                card.id === id ? {...card, ...updates} : card
+                card.id === id ? { ...card, ...updates } : card
             );
-            saveState({...state, cards: newCards});
-            return {cards: newCards};
+            saveState({ ...state, cards: newCards });
+            return { cards: newCards };
         }),
-
+    deleteCard: (id) =>
+        set((state) => {
+            const newCards = state.cards.filter((card) => card.id !== id);
+            saveState({ ...state, cards: newCards });
+            return { cards: newCards };
+        }),
     correctAnswer: (id) =>
         set((state) => {
             const newCards = state.cards.map((card) => {
@@ -281,14 +269,87 @@ export const useStore = create<Store>((set) => ({
             saveState({...state, cards: newCards});
             return {cards: newCards};
         }),
+    hideCard: (id) =>
+        set((state) => {
+            const newCards = state.cards.map((card) =>
+                card.id === id ? { ...card, hidden: true } : card
+            );
+            saveState({ ...state, cards: newCards });
+            return { cards: newCards };
+        }),
+
+    addCategory: (category) =>
+        set((state) => {
+            const newCategories = [...state.categories, category];
+            saveState({ ...state, categories: newCategories });
+            return { categories: newCategories };
+        }),
+    updateCategory: (oldCategory, newCategory) =>
+        set((state) => {
+            const newCategories = state.categories.map((category) =>
+                category === oldCategory ? newCategory : category
+            );
+            const newThemes = { ...state.themes, [newCategory]: state.themes[oldCategory] };
+            delete newThemes[oldCategory];
+            const newCards = state.cards.map((card) =>
+                card.category === oldCategory ? { ...card, category: newCategory } : card
+            );
+            saveState({ ...state, categories: newCategories, themes: newThemes, cards: newCards });
+            return { categories: newCategories, themes: newThemes, cards: newCards };
+        }),
+    deleteCategory: (category) =>
+        set((state) => {
+            const newCategories = state.categories.filter((cat) => cat !== category);
+            const { [category]: _, ...newThemes } = state.themes;
+            const newCards = state.cards.filter((card) => card.category !== category);
+            saveState({ ...state, categories: newCategories, themes: newThemes, cards: newCards });
+            return { categories: newCategories, themes: newThemes, cards: newCards };
+        }),
+
+    addTheme: (category, theme) =>
+        set((state) => {
+            const newThemes = {
+                ...state.themes,
+                [category]: state.themes[category]
+                    ? [...state.themes[category], theme]
+                    : [theme],
+            };
+            saveState({ ...state, themes: newThemes });
+            return { themes: newThemes };
+        }),
+    updateTheme: (category, oldTheme, newTheme) =>
+        set((state) => {
+            const newThemes = {
+                ...state.themes,
+                [category]: state.themes[category].map((theme) =>
+                    theme === oldTheme ? newTheme : theme
+                ),
+            };
+            const newCards = state.cards.map((card) =>
+                card.theme === oldTheme && card.category === category ? { ...card, theme: newTheme } : card
+            );
+            saveState({ ...state, themes: newThemes, cards: newCards });
+            return { themes: newThemes, cards: newCards };
+        }),
+    deleteTheme: (category, theme) =>
+        set((state) => {
+            const newThemes = {
+                ...state.themes,
+                [category]: state.themes[category].filter((th) => th !== theme),
+            };
+            const newCards = state.cards.filter(
+                (card) => !(card.theme === theme && card.category === category)
+            );
+            saveState({ ...state, themes: newThemes, cards: newCards });
+            return { themes: newThemes, cards: newCards };
+        }),
 
     saveToLocalStorage: () => set((state) => {
         saveState(state);
         return state;
     }),
-
     loadFromLocalStorage: () => set(() => loadState() || {}),
 }));
 
-// Appel de chargement initial
+// chargement initial
 useStore.getState().loadFromLocalStorage();
